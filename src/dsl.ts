@@ -13,13 +13,19 @@ async function addrToToken(address) {
   return symbol;
 }
 
-const evaluate = async (expression, abi, data) => {
+const evaluate = async (expression, abi, data, to_addr) => {
   const options = {
     userHelpers: {
       tokenSymbol: () => async (address) => {
         return {
           type: 'string',
           value: await addrToToken(address),
+        };
+      },
+      to: () => async () => {
+        return {
+          type: 'address',
+          value: to_addr,
         };
       },
     },
