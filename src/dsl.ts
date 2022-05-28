@@ -16,7 +16,7 @@ async function addrToToken(address) {
 const evaluate = async (expression, abi, data) => {
   const options = {
     userHelpers: {
-      tokenName: () => async (address) => {
+      tokenSymbol: () => async (address) => {
         return {
           type: 'string',
           value: await addrToToken(address),

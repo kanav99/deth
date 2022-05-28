@@ -14,7 +14,7 @@ const createServer = (): express.Application => {
   app.get('/health', (_req, res) => res.send('OK'));
   app.post('/contract', uploadContract);
   app.post('/abi', getAbi);
-  app.post('/rlp', decodeRlpController);
+  app.post('/tx', decodeRlpController);
   app.use(errorHandler);
 
   return app;
