@@ -1,6 +1,6 @@
 import { BN } from 'ethereumjs-util';
 import rlp from 'rlp';
-import db from '@server/db';
+import { get, exists } from '@controller/db';
 import * as dsl from '@server/dsl';
 
 const decodeRlp = (encoded: Buffer) => {
@@ -26,10 +26,9 @@ const decodeRlpController = async (req, res) => {
   if (decoded.data.length !== 0) {
     meta['type'] = 'contract';
     const address = decoded.to;
-    if (address in db) {
-      const { methods, doc, abi } = db[address];
+    if (await exists(address)) {
+      const { methods, doc, abi } = await get(address);
       const method = methods['0x' + decoded.data.substring(0, 8)];
-      console.log(methods);
       meta['method'] = method;
       meta['dialogue'] = await dsl.evaluate(
         doc['methods'][method.fullname]['notice'],

@@ -1,7 +1,7 @@
 // import web3 from 'web3';
 import * as ethjs from 'ethereumjs-util';
 import Web3 from 'web3';
-import db from '@server/db';
+import { set } from '@controller/db';
 
 import config from '@config/network';
 const ethNetwork = `https://${config.network}.infura.io/v3/${config.infura.project}`;
@@ -20,7 +20,7 @@ const uploadContract = async (req, res) => {
       sign.s,
     );
     const signerAddress = ethjs.pubToAddress(publicKey).toString('hex');
-    if (signerAddress in config.admins) {
+    if (config.admins.includes(signerAddress)) {
       // this fucking call mutates `abi`....but for good actually
       // const contract = new web3.eth.Contract(abi);
       new web3.eth.Contract(abi);
@@ -37,7 +37,7 @@ const uploadContract = async (req, res) => {
           };
         }
       }
-      db[address] = { methods, abi, doc };
+      await set(address, { methods, abi, doc });
 
       res.json({ message: 'ok', address });
     } else {
