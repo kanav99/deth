@@ -8,7 +8,7 @@ const errorHandler = (
 ) => {
   if (res.headersSent) return next(err);
 
-  res.status(500).json({ message: '¯\\_(ツ)_/¯' });
+  res.status(500).json({ message: '¯\\_(ツ)_/¯', error: err });
 };
 
 export default errorHandler;

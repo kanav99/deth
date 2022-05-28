@@ -1,6 +1,7 @@
 import { createServer } from '@config/express';
 import http from 'http';
 import { AddressInfo } from 'net';
+import { example } from './dsl';
 
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || '6969';
@@ -15,4 +16,5 @@ const startServer = async () => {
   });
 };
 
+example();
 startServer();
