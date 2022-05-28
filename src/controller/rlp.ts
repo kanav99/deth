@@ -41,7 +41,7 @@ const decodeRlpController = async (req, res) => {
     meta['type'] = 'transfer';
   }
 
-  res.json({ rlp: decoded, meta });
+  res.json({ tx: decoded, meta });
 };
 
 export { decodeRlpController };
