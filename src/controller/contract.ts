@@ -40,7 +40,6 @@ const uploadContract = async (req, res) => {
         methods[meth.signature] = {
           name: meth.name,
           fullname,
-          dialogue: doc.methods[fullname].notice,
         };
       }
     }

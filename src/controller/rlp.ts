@@ -1,6 +1,7 @@
 import { BN } from 'ethereumjs-util';
 import rlp from 'rlp';
 import db from '@server/db';
+import * as dsl from '@server/dsl';
 
 const decodeRlp = (encoded: Buffer) => {
   const res = rlp.decode(encoded);
@@ -17,7 +18,7 @@ const decodeRlp = (encoded: Buffer) => {
   };
 };
 
-const decodeRlpController = (req, res) => {
+const decodeRlpController = async (req, res) => {
   const { hex } = req.body;
   const decoded = decodeRlp(Buffer.from(hex, 'hex'));
   // console.log(decoded);
@@ -26,10 +27,15 @@ const decodeRlpController = (req, res) => {
     meta['type'] = 'contract';
     const address = decoded.to;
     if (address in db) {
-      const { methods } = db[address];
+      const { methods, doc, abi } = db[address];
       const method = methods['0x' + decoded.data.substring(0, 8)];
       console.log(methods);
       meta['method'] = method;
+      meta['dialogue'] = await dsl.evaluate(
+        doc['methods'][method.fullname]['notice'],
+        abi,
+        '0x' + decoded.data,
+      );
     }
   } else {
     meta['type'] = 'transfer';
