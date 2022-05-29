@@ -3,6 +3,7 @@ import ERC20Contract from 'erc20-contract-js';
 import Web3 from 'web3';
 
 import config from '@config/network';
+import { exists, get, set } from './controller/db';
 const ethNetwork = `https://${config.network}.infura.io/v3/${config.infura.project}`;
 
 const web3 = new Web3(new Web3.providers.HttpProvider(ethNetwork));
@@ -17,9 +18,24 @@ const evaluate = async (expression, abi, data, to_addr) => {
   const options = {
     userHelpers: {
       tokenSymbol: () => async (address) => {
+        if (await exists('knownerc20.' + address)) {
+          const val = await get('knownerc20.' + address);
+          console.log('fast path goes zoom zoom');
+          return {
+            type: 'string',
+            value: val,
+          };
+        }
+        const val = await addrToToken(address);
+        var erc20list = await get('knownerc20');
+        if (!erc20list) {
+          erc20list = {};
+        }
+        erc20list[address] = val;
+        await set('knownerc20', erc20list);
         return {
           type: 'string',
-          value: await addrToToken(address),
+          value: val,
         };
       },
       to: () => async () => {
