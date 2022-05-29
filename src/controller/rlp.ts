@@ -3,6 +3,7 @@ import rlp from 'rlp';
 import { get, exists } from '@controller/db';
 import * as dsl from '@server/dsl';
 import { patterns } from './match';
+import fs from 'fs';
 
 const decodeRlp = (encoded: Buffer) => {
   const res = rlp.decode(encoded);
@@ -54,6 +55,14 @@ const decodeRlpController = async (req, res) => {
         '0x' + decoded.data,
         decoded.to,
       );
+    } else {
+      const content = fs
+        .readFileSync('4bytes/with_parameter_names/' + sig.substring(2))
+        .toString();
+      const methodName = content.split('\n')[0].split(';')[0];
+      meta[
+        'dialogue'
+      ] = `Method invocation \`${methodName}\` for contract \`${address}\``;
     }
   } else {
     meta['type'] = 'transfer';
