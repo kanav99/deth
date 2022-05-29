@@ -12,7 +12,7 @@ deth is a low-maintenence transaction hex to natural language decoder API. It le
 curl -X POST https://api.deth.kanavgupta.xyz/tx -H 'Content-Type: application/json' --data '{ "hex": "<put transaction hex here>" }' | json_pp
 ```
 
-Checkout demo at [https://deth.kanavgupta.xyz](https://deth.kanavgupta.xyz)
+Checkout demo at [https://deth.kanavgupta.xyz](https://deth.kanavgupta.xyz). Frontend for this website is available at [https://github.com/kanav99/deth-frontend](https://github.com/kanav99/deth-frontend).
 
 ## Add your contract ABI to the API
 
