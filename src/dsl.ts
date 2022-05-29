@@ -14,6 +14,18 @@ async function addrToToken(address) {
   return symbol;
 }
 
+async function addrToTokenDecimal(address) {
+  const ctr = new ERC20Contract(web3, address);
+  const symbol = await ctr.decimals().call();
+  return symbol;
+}
+
+async function addrToTokenSupply(address) {
+  const ctr = new ERC20Contract(web3, address);
+  const symbol = await ctr.totalSupply().call();
+  return symbol;
+}
+
 const evaluate = async (expression, abi, data, to_addr) => {
   const options = {
     userHelpers: {
@@ -42,6 +54,20 @@ const evaluate = async (expression, abi, data, to_addr) => {
         return {
           type: 'address',
           value: to_addr,
+        };
+      },
+      tokenDecimal: () => async (address) => {
+        const val = await addrToTokenDecimal(address);
+        return {
+          type: 'string',
+          value: val,
+        };
+      },
+      tokenSupply: () => async (address) => {
+        const val = await addrToTokenSupply(address);
+        return {
+          type: 'string',
+          value: val,
         };
       },
     },
